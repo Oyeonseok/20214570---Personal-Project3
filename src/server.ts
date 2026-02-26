@@ -18,14 +18,6 @@ import { getOwaspResource } from './resources/owasp-top10.js';
 import { getSecurePatternsResource } from './resources/secure-patterns.js';
 import { getSecurityBlueprint } from './resources/security-blueprints.js';
 
-import {
-  SECURE_BUILD_PROMPT,
-  buildSecureBuildMessages,
-  SECURITY_CODE_REVIEW_PROMPT,
-  buildCodeReviewMessages,
-  THREAT_MODELING_PROMPT,
-  buildThreatModelingMessages,
-} from './prompts/code-review.js';
 
 const VERSION = '0.1.0';
 
@@ -183,29 +175,6 @@ export function createServer(): McpServer {
       mimeType: 'text/plain',
     },
     async () => ({ contents: [{ uri: 'security://blueprints', text: getSecurityBlueprint(), mimeType: 'text/plain' }] }),
-  );
-
-  // ─── Prompts ───
-
-  server.prompt(
-    SECURE_BUILD_PROMPT.name,
-    SECURE_BUILD_PROMPT.description,
-    { feature: z.string(), language: z.string().optional() },
-    async (args) => ({ messages: buildSecureBuildMessages(args as Record<string, string>) }),
-  );
-
-  server.prompt(
-    SECURITY_CODE_REVIEW_PROMPT.name,
-    SECURITY_CODE_REVIEW_PROMPT.description,
-    { code: z.string(), language: z.string().optional(), context: z.string().optional() },
-    async (args) => ({ messages: buildCodeReviewMessages(args as Record<string, string>) }),
-  );
-
-  server.prompt(
-    THREAT_MODELING_PROMPT.name,
-    THREAT_MODELING_PROMPT.description,
-    { system_description: z.string(), assets: z.string().optional() },
-    async (args) => ({ messages: buildThreatModelingMessages(args as Record<string, string>) }),
   );
 
   return server;

@@ -90,11 +90,8 @@ describe('MCP Server Integration', () => {
     expect(uris.some((u) => u.includes('blueprints'))).toBe(true);
   });
 
-  it('has 3 prompts registered', () => {
+  it('has no prompts registered', () => {
     const prompts = (server as any)._registeredPrompts as Record<string, unknown>;
-    const names = Object.keys(prompts);
-    expect(names).toContain('secure_build');
-    expect(names).toContain('security_code_review');
-    expect(names).toContain('threat_modeling');
+    expect(Object.keys(prompts).length).toBe(0);
   });
 });
